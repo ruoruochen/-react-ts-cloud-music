@@ -1,16 +1,24 @@
 import React from 'react';
-import { IMusicData } from '@/types/common';
+import { connect } from 'react-redux';
+import { IMusicData, IRootState } from '@/types';
 
 interface IAlbumProps {
-    musicData: IMusicData;
-    id: string;
+    picUrl: string;
 }
 
-export default function Album(props: IAlbumProps) {
-    const { al: albumData } = props.musicData;
+function Album(props: IAlbumProps) {
+    const { picUrl } = props;
     return (
         <div className="album-container">
-            <img className="album-img" src={albumData?.picUrl} alt="" />
+            <img className="album-img" src={picUrl} alt="" />
         </div>
     );
 }
+
+const mapState = (state: IRootState) => {
+    return {
+        picUrl: state.music.picUrl,
+    };
+};
+
+export default connect(mapState)(Album);

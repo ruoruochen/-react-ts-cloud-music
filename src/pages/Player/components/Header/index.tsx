@@ -1,12 +1,13 @@
 import React from 'react';
-import { IMusicData } from '@/types/common';
+import { connect } from 'react-redux';
+import { IMusicData, IRootState, ISinger } from '@/types';
 
 interface IHeaderProps {
-    musicData: IMusicData;
+    name: string;
+    singerList: Array<ISinger>;
 }
-export default function Header(props: IHeaderProps) {
-    const { name, ar: singerList } = props.musicData || {};
-    console.log('info-name', name, singerList);
+function Header(props: IHeaderProps) {
+    const { name, singerList } = props;
     return (
         <div className="header-container">
             <div className="left-icon"></div>
@@ -17,3 +18,12 @@ export default function Header(props: IHeaderProps) {
         </div>
     );
 }
+
+const mapState = (state: IRootState) => {
+    return {
+        name: state.music.name,
+        singerList: state.music.singerList,
+    };
+};
+
+export default connect(mapState)(Header);

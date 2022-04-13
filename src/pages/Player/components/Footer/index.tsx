@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { GET_SONG_URL } from '@/api/player';
-import request from '@/utils/request';
-import { IMusicUrl } from '@/types/common';
+import { connect } from 'react-redux';
+import NormalPlayer from '@/components/normal-player';
+import { IRootState } from '@/types';
+import Player from '@/plugins';
 interface IFooterProps {
-    id: string;
+    url: string;
+    duration: number;
 }
 
-export default function Player(props: IFooterProps) {
-    const [musicUrl, setMusicUrl] = useState<IMusicUrl>({ url: '' });
-
+function Footer(props: IFooterProps) {
+    const { url, duration } = props;
     useEffect(() => {
-        const getMusicUrl = async () => {
-            const res: { data: object } = await request.get(GET_SONG_URL, { id: props.id });
-            let data = Array.isArray(res.data) ? res.data[0] : {};
-            console.log(data);
-            setMusicUrl(data);
-        };
-
-        getMusicUrl();
-    }, [props.id]);
+        Player.play({ url });
+    }, [props.url]);
     return (
         <div>
-            <audio className="player-audio" src={musicUrl.url}></audio>
-            Player
+            <NormalPlayer max={duration} />
         </div>
     );
 }
+
+const mapState = (state: IRootState) => {
+    return {
+        url: state.music.musicUrl,
+        duration: state.music.duration,
+    };
+};
+
+export default connect(mapState)(Footer);
