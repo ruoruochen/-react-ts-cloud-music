@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, MouseEvent } from 'react';
 import '@/assets/styles/iconfont.css';
 
 /**
@@ -14,11 +14,14 @@ interface IProps {
     color?: string;
     width?: number;
     height?: number;
+    onClick?: (event: MouseEvent) => void;
 }
 
 const Icon = (props: IProps): ReactElement => {
-    const { type, color, width, height } = props;
-    return <i style={{ color, width, height, fontStyle: 'normal' }} className={`iconfont ${type}`}></i>;
+    const { type, color, width, height, onClick } = props;
+    return (
+        <i style={{ color, width, height, fontStyle: 'normal' }} className={`iconfont ${type}`} onClick={onClick}></i>
+    );
 };
 
 export default Icon;
